@@ -1,0 +1,41 @@
+cmake_minimum_required(VERSION 2.8.3)
+# Add pre-processor compile flag indicating catkin
+add_definitions( -DCATKIN_BUILD )
+
+# CMake file that uses catkin
+find_package(catkin REQUIRED COMPONENTS
+  naoqi_libqi
+  naoqi_libqicore
+  pepper_behaviour_srvs
+  roscpp
+  rospy
+  std_msgs
+  genmsg
+)
+add_definitions(-DLIBQI_VERSION=${naoqi_libqi_VERSION_MAJOR}${naoqi_libqi_VERSION_MINOR})
+
+catkin_package()
+
+include_directories(include ${catkin_INCLUDE_DIRS})
+
+#target_link_libraries(roscpp ${catkin_LIBRARIES})
+
+add_executable(behaviour_node src/behaviour.cpp)
+target_link_libraries(behaviour_node ${catkin_LIBRARIES})
+add_dependencies(behaviour_node pepper_behaviour_srvs_gencpp)
+
+
+#add_library(
+#  pepper_behaviour
+#  SHARED
+#  src/behaviour.cpp
+#)
+
+#target_link_libraries(
+#  pepper_behaviour
+#  ${catkin_LIBRARIES}
+#  )
+
+#add_dependencies(pepper_behaviour pepper_behaviour_srvs)
+
+#add_executable( pepper_behaviour_node src/behaviour.cpp)
